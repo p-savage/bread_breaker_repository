@@ -15,8 +15,8 @@ class BreadBreaker:
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width,
             self.settings.screen_height))
-        self.screen.fill(self.settings.bg_color)
-        pygame.display.set_caption('Bread-Breaker')
+        self.screen.blit(self.settings.bg_image, (0,0))
+        pygame.display.set_caption('Bread Breaker')
 
         self.bumper = Bumper(self)
         
@@ -31,9 +31,25 @@ class BreadBreaker:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         sys.exit()
-            self.bumper.show_bumper()
-            pygame.display.flip()
-            self.clock.tick(60)
+                    elif event.key == pygame.K_RIGHT:
+                        self.bumper.moving_right = True
+                    elif event.key == pygame.K_LEFT:
+                        self.bumper.moving_left = True
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_RIGHT:
+                        self.bumper.moving_right = False
+                    elif event.key == pygame.K_LEFT:
+                        self.bumper.moving_left = False
+            self.bumper.update()
+            self._update_screen()
+            self.clock.tick(60) 
+
+    def _update_screen(self):
+        """Draws a new frame and shows it"""
+        self.screen.blit(self.settings.bg_image, (0,0))
+        self.bumper.show_bumper()
+        pygame.display.flip()
+            
 
 if __name__ == '__main__':
     bb = BreadBreaker()
