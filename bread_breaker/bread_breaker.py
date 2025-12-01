@@ -171,6 +171,9 @@ class BreadBreaker:
         """Draws a new frame and shows it"""
         self.screen.blit(self.settings.bg_image, (0,0))
         self.bricks.draw(self.screen)
+        ##hitbox refinement; delete when done
+        for brick in self.bricks:
+            brick.draw_hitbox()
         self.bumper.show_bumper()
         self.ball.draw()
         pygame.display.flip()

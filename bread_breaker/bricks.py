@@ -16,4 +16,13 @@ class Bricks(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = self.rect.height
-        
+
+    def draw_hitbox(self):
+        """Draws a rect for hitbox refinement"""     
+        #red rect for hitbox refinement; delete when done
+        pygame.draw.rect(
+            self.screen,
+            (255,0,0),
+            self.rect,
+            1
+        )

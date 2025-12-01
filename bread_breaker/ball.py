@@ -17,6 +17,7 @@ class Ball:
         #get the rectangle
         self.rect = self.image.get_rect()
         self.rect.inflate_ip(-2,-2)
+        self.radius = self.rect.width //2
        
         #set its starting position
         self.rect.centerx = self.screen_rect.centerx
@@ -53,5 +54,12 @@ class Ball:
     def draw(self):
         """Draw the ball to the screen"""
         self.screen.blit(self.image, (self.rect.x, self.rect.y-2))
-        ##red rect for hitbox debugging, delete when done
+        ##red rect and green circle for hitbox debugging, delete when done
         pygame.draw.rect(self.screen, (255,0,0), self.rect, 2)
+        pygame.draw.circle(
+            self.screen,
+            (0,255,0),
+            self.rect.center,
+            self.radius,
+            1
+        )
