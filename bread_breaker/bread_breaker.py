@@ -24,7 +24,7 @@ class BreadBreaker:
         self.bumper = Bumper(self)
         self.bricks = pygame.sprite.Group()
         self.ball = Ball(self)
-
+        #draw the brick array
         self._create_array()
 
         self.clock = pygame.time.Clock()
@@ -73,11 +73,72 @@ class BreadBreaker:
     def _check_collisions(self):
         """Look for collisions and send appropriate response call"""
         for brick in self.bricks:
+            #ball and brick collision
             if self.ball.rect.colliderect(brick):
+                #brick bottom
+                if (
+                self.ball.vector.y < 0 #moving upwards
+                and (self.ball.x+self.ball.rect.width > brick.rect.x)
+                and (self.ball.x < brick.rect.x+brick.rect.width) #x position
+                and (self.ball.y <= brick.rect.y+brick.rect.height+3)
+                and (self.ball.y >= brick.rect.y+brick.rect.height-3) #y position
+                ):
+                    self.ball.vector.y = self.ball.vector.y * -1 #flip y vector
+                #brick top
+                if (
+                self.ball.vector.y > 0 #moving downwards
+                and (self.ball.x+self.ball.rect.width > brick.rect.x)
+                and (self.ball.x < brick.rect.x+brick.rect.width) #x position
+                and (self.ball.y+self.ball.rect.height >= brick.rect.y-3)
+                and (self.ball.y+self.ball.rect.height <= brick.rect.y+3) #y position
+                ):
+                    self.ball.vector.y = self.ball.vector.y * -1 #flip y vector
+                #brick right
+                if (
+                self.ball.vector.x < 0 #moving left
+                and (self.ball.x <= brick.rect.x+brick.rect.width+3)
+                and (self.ball.x >= brick.rect.x+brick.rect.width-3) #x position
+                and (self.ball.y < brick.rect.y+brick.rect.height)
+                and (self.ball.y+self.ball.rect.height > brick.rect.y) #y position
+                ):
+                    self.ball.vector.x = self.ball.vector.x * -1 #flip x vector
+                #brick left
+                if (
+                self.ball.vector.x > 0 #moving right
+                and (self.ball.x+self.ball.rect.width >= brick.rect.x-3)
+                and (self.ball.x+self.ball.rect.width <= brick.rect.x+3) #x position
+                and (self.ball.y < brick.rect.y+brick.rect.height)
+                and (self.ball.y+self.ball.rect.height > brick.rect.y) #y position
+                ):
+                    self.ball.vector.x = self.ball.vector.x * -1 #flip x vector
                 self.bricks.remove(brick)
-                self.ball.vector.y = self.ball.vector.y * -1
+        #ball and bumper collision
         if self.ball.rect.colliderect(self.bumper):
-            self.ball.vector.y = self.ball.vector.y * -1
+            #top collison
+            if (
+            (self.ball.x+self.ball.rect.width > self.bumper.rect.x)
+            and (self.ball.x < self.bumper.rect.x+self.bumper.rect.width) #x position
+            and (self.ball.y+self.ball.rect.height >= self.bumper.rect.y-3)
+            and (self.ball.y+self.ball.rect.height <= self.bumper.rect.y+3) #y position
+            ):
+                self.ball.vector.y = self.ball.vector.y * -1
+            #left collision
+            if (
+            (self.ball.x+self.ball.rect.width >= self.bumper.rect.x-3)
+            and (self.ball.x+self.ball.rect.width <= self.bumper.rect.x+3) #x position
+            and (self.ball.y < self.bumper.rect.y+self.bumper.rect.height)
+            and (self.ball.y+self.ball.rect.height > self.bumper.rect.y) #y position
+            ):
+                self.ball.vector.x = self.ball.vector.x * -1 #flip x vector
+            #right collision
+            if (
+            (self.ball.x <= brick.rect.x+brick.rect.width+3)
+            and (self.ball.x >= brick.rect.x+brick.rect.width-3) #x position
+            and (self.ball.y < brick.rect.y+brick.rect.height)
+            and (self.ball.y+self.ball.rect.height > brick.rect.y) #y position
+            ):
+                self.ball.vector.x = self.ball.vector.x * -1 #flip x vector
+        #ball and wall collision
         if self.ball.rect.colliderect(self.settings.right_edge):
             self.ball.vector.x = self.ball.vector.x * -1
         if self.ball.rect.colliderect(self.settings.left_edge):

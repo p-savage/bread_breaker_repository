@@ -16,8 +16,9 @@ class Bumper:
         self.image_rotated = pygame.transform.rotate(self.image_raw, 90)
         self.image = pygame.transform.smoothscale(self.image_rotated,
                                                   (240,60))
-        #get its rect
+        #get its rect and adjust its size for collision accuracy
         self.rect = self.image.get_rect()
+        self.rect.inflate_ip(-5,-10)
         #set it at the bottom middle of the screen
         self.rect.centerx = self.screen_rect.centerx
         self.rect.bottom = (self.screen_rect.bottom - 15)
@@ -39,4 +40,6 @@ class Bumper:
 
     def show_bumper(self):
         """Draw the bumper on the screen"""
-        self.screen.blit(self.image, self.rect) 
+        self.screen.blit(self.image, (self.rect.x, self.rect.y-10)) 
+        ##red rect used for hitbox debugging, delete when done
+        pygame.draw.rect(self.screen, (255,0,0), self.rect, 2)
