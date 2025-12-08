@@ -20,3 +20,5 @@ class Settings:
         self.bumper_speed = 12
         #ball speed
         self.ball_speed = 3
+        #collision tolerance
+        self.coll_tol = 3
